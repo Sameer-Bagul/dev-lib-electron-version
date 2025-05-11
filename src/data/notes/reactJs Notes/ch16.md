@@ -1,0 +1,225 @@
+### **Chapter 16: All React Hooks (Comprehensive Guide)**
+
+React provides a powerful set of hooks to manage state, lifecycle, and other logic in function components. Below is a categorized and detailed guide to every React hook for interview preparation and coding expertise.
+
+---
+
+#### **1. Basic Hooks**
+
+1. **`useState`**
+   - Manages state in a functional component.
+   - **Syntax**: `const [state, setState] = useState(initialState);`
+   - **Example**:
+     ```jsx
+     const [count, setCount] = useState(0);
+
+     return (
+       <button onClick={() => setCount(count + 1)}>
+         Count: {count}
+       </button>
+     );
+     ```
+   - **Common Interview Question**: 
+     - How does React's `useState` work under the hood?
+     - What's the difference between class component `state` and `useState`?
+
+---
+
+2. **`useEffect`**
+   - Handles side effects like data fetching, subscriptions, or manually changing the DOM.
+   - **Syntax**: `useEffect(() => { effect }, [dependencies]);`
+   - **Example**:
+     ```jsx
+     useEffect(() => {
+       document.title = `Count: ${count}`;
+     }, [count]);
+     ```
+   - **Common Interview Question**:
+     - What's the difference between `componentDidMount`, `componentDidUpdate`, and `componentWillUnmount` in `useEffect`?
+
+---
+
+3. **`useContext`**
+   - Consumes a context value passed down by a provider.
+   - **Syntax**: `const value = useContext(Context);`
+   - **Example**:
+     ```jsx
+     const ThemeContext = React.createContext('light');
+     const theme = useContext(ThemeContext);
+     ```
+   - **Common Interview Question**: 
+     - How does `useContext` differ from the `Context.Consumer`?
+
+---
+
+#### **2. Additional Hooks**
+
+4. **`useReducer`**
+   - A more advanced state management hook than `useState`.
+   - **Syntax**: `const [state, dispatch] = useReducer(reducer, initialArg, init?);`
+   - **Example**:
+     ```jsx
+     const reducer = (state, action) => {
+       switch (action.type) {
+         case 'increment': return { count: state.count + 1 };
+         default: return state;
+       }
+     };
+
+     const [state, dispatch] = useReducer(reducer, { count: 0 });
+     ```
+   - **Common Interview Question**: 
+     - When would you prefer `useReducer` over `useState`?
+
+---
+
+5. **`useRef`**
+   - Persists a mutable value that doesn’t trigger re-renders.
+   - **Syntax**: `const ref = useRef(initialValue);`
+   - **Example**:
+     ```jsx
+     const inputRef = useRef();
+
+     return (
+       <button onClick={() => inputRef.current.focus()}>
+         Focus Input
+       </button>
+     );
+     ```
+   - **Common Interview Question**: 
+     - How is `useRef` used for DOM manipulation?
+
+---
+
+6. **`useMemo`**
+   - Optimizes performance by memoizing expensive calculations.
+   - **Syntax**: `const memoizedValue = useMemo(() => computeValue, [dependencies]);`
+   - **Example**:
+     ```jsx
+     const expensiveCalculation = useMemo(() => computeExpensiveValue(data), [data]);
+     ```
+   - **Common Interview Question**:
+     - How does `useMemo` help in React performance optimization?
+
+---
+
+7. **`useCallback`**
+   - Memoizes functions to prevent unnecessary re-creations.
+   - **Syntax**: `const memoizedCallback = useCallback(() => callback, [dependencies]);`
+   - **Example**:
+     ```jsx
+     const handleClick = useCallback(() => {
+       console.log('Button clicked');
+     }, []);
+     ```
+   - **Common Interview Question**: 
+     - What's the difference between `useCallback` and `useMemo`?
+
+---
+
+#### **3. Advanced Hooks**
+
+8. **`useLayoutEffect`**
+   - Fires synchronously after all DOM mutations.
+   - **Syntax**: `useLayoutEffect(() => { effect }, [dependencies]);`
+   - **Example**:
+     ```jsx
+     useLayoutEffect(() => {
+       console.log('Layout effect triggered');
+     });
+     ```
+   - **Common Interview Question**: 
+     - When would you use `useLayoutEffect` over `useEffect`?
+
+---
+
+9. **`useImperativeHandle`**
+   - Customizes the instance value exposed by a `ref`.
+   - **Syntax**: `useImperativeHandle(ref, createHandle, [dependencies]);`
+   - **Example**:
+     ```jsx
+     useImperativeHandle(ref, () => ({
+       focus: () => inputRef.current.focus(),
+     }));
+     ```
+   - **Common Interview Question**:
+     - Why is `useImperativeHandle` considered an escape hatch?
+
+---
+
+10. **`useTransition`**
+    - Defers non-urgent state updates to keep the UI responsive.
+    - **Syntax**: `const [isPending, startTransition] = useTransition();`
+    - **Example**: Refer to [Chapter 14](#useTransition).
+    - **Common Interview Question**: 
+      - How does `useTransition` enhance user experience in concurrent mode?
+
+---
+
+11. **`useDeferredValue`**
+    - Delays updates to a value for non-urgent renders.
+    - **Syntax**: `const deferredValue = useDeferredValue(value);`
+    - **Example**:
+      ```jsx
+      const deferredQuery = useDeferredValue(query);
+      ```
+
+---
+
+12. **`useId`**
+    - Generates unique IDs for components.
+    - **Syntax**: `const id = useId();`
+    - **Example**:
+      ```jsx
+      const id = useId();
+      return <input id={id} />;
+      ```
+
+---
+
+13. **`useSyncExternalStore`**
+    - Subscribes to an external store in a way that is compatible with concurrent rendering.
+    - **Syntax**: `useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);`
+    - **Example**:
+      ```jsx
+      const state = useSyncExternalStore(store.subscribe, store.getState);
+      ```
+
+---
+
+#### **4. Custom Hook**
+
+14. **Creating Custom Hooks**
+    - Custom hooks let you extract and reuse component logic.
+    - **Example**:
+      ```jsx
+      const useFetch = (url) => {
+        const [data, setData] = useState(null);
+
+        useEffect(() => {
+          fetch(url)
+            .then((res) => res.json())
+            .then((data) => setData(data));
+        }, [url]);
+
+        return data;
+      };
+      ```
+
+---
+
+#### **FAQs and Interview Tips**
+
+1. **What is the difference between `useMemo` and `useCallback`?**
+   - `useMemo` is for memoizing values, while `useCallback` is for memoizing functions.
+
+2. **How does `useRef` differ from `useState`?**
+   - `useRef` does not cause re-renders, while `useState` does.
+
+3. **What problem does `useTransition` solve?**
+   - It enhances responsiveness by deferring non-urgent updates.
+
+4. **When should you use custom hooks?**
+   - When you need to share logic between multiple components.
+
+By mastering these hooks and understanding their applications, you'll be prepared for any React interview and capable of building complex applications efficiently.

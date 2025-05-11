@@ -1,0 +1,70 @@
+/* Light theme variables */
+:root[class~="light"] {
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f3f4f6;
+  --color-bg-tertiary: #e5e7eb;
+  --color-text-primary: #111827;
+  --color-text-secondary: #374151;
+  --color-text-tertiary: #6b7280;
+  --color-border: #e5e7eb;
+  --color-accent: #4f46e5;
+  --color-accent-hover: #4338ca;
+  --color-sidebar: #f9fafb;
+  --color-card: #ffffff;
+  --color-card-hover: #f3f4f6;
+}
+
+/* Dark theme variables */
+:root[class~="dark"] {
+  --color-bg-primary: #111827;
+  --color-bg-secondary: #1f2937;
+  --color-bg-tertiary: #374151;
+  --color-text-primary: #f9fafb;
+  --color-text-secondary: #e5e7eb;
+  --color-text-tertiary: #9ca3af;
+  --color-border: #374151;
+  --color-accent: #6366f1;
+  --color-accent-hover: #818cf8;
+  --color-sidebar: #1f2937;
+  --color-card: #1f2937;
+  --color-card-hover: #374151;
+}
+
+/* Base styles using CSS variables */
+body {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+}
+
+.sidebar {
+  background-color: var(--color-sidebar);
+  border-color: var(--color-border);
+}
+
+.card {
+  background-color: var(--color-card);
+  border-color: var(--color-border);
+}
+
+.card:hover {
+  background-color: var(--color-card-hover);
+}
+
+/* Typography */
+.heading-primary {
+  color: var(--color-text-primary);
+}
+
+.text-secondary {
+  color: var(--color-text-secondary);
+}
+
+/* Buttons and interactive elements */
+.btn-primary {
+  background-color: var(--color-accent);
+  color: var(--color-text-primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-accent-hover);
+}
