@@ -75,3 +75,9 @@
 .prose code[class*="language-"] {
   @apply text-gray-800 dark:text-gray-200;
 }
+.prose li h1,
+.prose li h2,
+.prose li h3,
+.prose li h4 {
+  margin-top: 0.5rem;
+}
