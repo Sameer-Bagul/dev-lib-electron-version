@@ -2,22 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import MarkdownRenderer from './MarkdownRenderer';
 import TableOfContents from './TableOfContents';
-import Pagination from './Pagination';
 import ProgressBar from './ProgressBar';
-import { Clock, Calendar, BookOpen } from 'lucide-react';
-import { 
-  extractTableOfContents, 
-  formatDate, 
-  getReadingTime,
-  getAdjacentNotes,
-} from '../utils/noteUtils';
+import NoteMetadata from './NoteMetadata';
+import NoteContent from './NoteContent';
+import { X } from 'lucide-react';
+import { extractTableOfContents } from '../utils/noteUtils';
 import { getNoteContent } from '../utils/fileSystem';
+import { useFocusedMode } from '../contexts/FocusedModeContext';
 
 export default function NoteView() {
   const { '*': path } = useParams(); // Use catch-all parameter
   const navigate = useNavigate();
+  const { isFocused, toggleFocused } = useFocusedMode();
   const [content, setContent] = useState('');
-  const [currentSection, setCurrentSection] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
   
@@ -47,8 +44,10 @@ export default function NoteView() {
   }, [path]);
 
   const toc = extractTableOfContents(content);
-  const readingTime = getReadingTime(content);
-  const { previous, next } = getAdjacentNotes('/' + (path || ''));
+
+  const handleToggleFocused = () => {
+    toggleFocused();
+  };
 
   if (isLoading) {
     return (
@@ -73,36 +72,34 @@ export default function NoteView() {
     );
   }
 
+  if (isFocused) {
+    return (
+      <div className="relative">
+        <button
+          onClick={handleToggleFocused}
+          className="absolute top-4 right-4 p-2 rounded-lg bg-[var(--color-bg-secondary)] hover:bg-[var(--color-bg-tertiary)] transition-colors z-10"
+          aria-label="Exit focused mode"
+        >
+          <X className="w-5 h-5" />
+        </button>
+        <div>
+          <MarkdownRenderer content={content} />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       <ProgressBar />
       <div className="grid grid-cols-12 gap-8">
         <article className="col-span-12 lg:col-span-9 bg-[var(--color-card)] rounded-lg border border-[var(--color-border)] p-8">
-          <div className="flex flex-wrap items-center gap-4 text-sm text-[var(--color-text-tertiary)] mb-8">
-            <div className="flex items-center gap-1">
-              <Calendar className="w-4 h-4" />
-              <span>{formatDate(new Date().toISOString())}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Clock className="w-4 h-4" />
-              <span>{readingTime} min read</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <BookOpen className="w-4 h-4" />
-              <span>{path?.split('/').slice(0, -1).join(' / ')}</span>
-            </div>
-          </div>
-          
-          <MarkdownRenderer content={content} />
-          
-          <Pagination
-            previousNote={previous}
-            nextNote={next}
-          />
+          <NoteMetadata path={path || ''} content={content} onToggleFocused={handleToggleFocused} />
+          <NoteContent content={content} path={path || ''} />
         </article>
-        
+
         <aside className="hidden lg:block lg:col-span-3">
-          <TableOfContents items={toc} currentSection={currentSection} />
+          <TableOfContents items={toc} currentSection="" />
         </aside>
       </div>
     </>
